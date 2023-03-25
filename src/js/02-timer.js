@@ -70,8 +70,8 @@ function onDateSelected(selectedDate) {
   const isOnPast = selectedDate < options.defaultDate;
   if (isOnPast) {
     Notiflix.Report.warning(
-      'Warning',
-      'Please choose a date in the future',
+      'Помилка',
+      'Виберіть день в майбутньому',
       'OK'
     );
     countdown.startButtonEl.disabled = true;
