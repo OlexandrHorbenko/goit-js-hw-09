@@ -20,14 +20,22 @@ function getFormValues(form) {
 }
 
 function handlePromises(delay, step, amount) {
-  let i = 1;
   let lastPromiseCreated = false;
+  const firstPromiseDelay = delay;
+  createPromise(1, firstPromiseDelay)
+    .then(result => handlePromiseSuccess(result))
+    .catch(error => handlePromiseError(error));
+
+  let i = 2;
   const intervalId = setInterval(() => {
     if (i <= amount) {
       createPromise(i, delay + (i - 1) * step)
         .then(result => handlePromiseSuccess(result))
         .catch(error => handlePromiseError(error));
       i += 1;
+      if (i > amount) {
+        lastPromiseCreated = true;
+      }
     } else {
       clearInterval(intervalId);
     }
@@ -39,9 +47,9 @@ function handlePromises(delay, step, amount) {
       createPromise(amount, delay + (amount - 1) * step)
         .then(result => handlePromiseSuccess(result))
         .catch(error => handlePromiseError(error));
+      lastPromiseCreated = true;
     }
   }, lastPromiseDelay);
-  lastPromiseCreated = true;
 }
 
 function handlePromiseSuccess({ position, delay }) {
@@ -53,15 +61,23 @@ function handlePromiseError({ position, delay }) {
 }
 
 function createPromise(position, delay, step) {
-  console.log(`Creating promise ${position} with delay ${delay}ms`);
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const shouldResolve = Math.random() > 0.3;
-      if (shouldResolve) {
-        resolve({ position, delay });
+  // console.log(`Creating promise ${position} with delay ${delay}ms`);
+return new Promise((resolve, reject) => {
+    const startTime = performance.now();
+    function checkTime() {
+      const currentTime = performance.now();
+      const elapsed = currentTime - startTime;
+      if (elapsed >= delay) {
+        const shouldResolve = Math.random() > 0.3;
+        if (shouldResolve) {
+          resolve({ position, delay });
+        } else {
+          reject({ position, delay });
+        }
       } else {
-        reject({ position, delay });
+        requestAnimationFrame(checkTime);
       }
-    }, step);
+    }
+    checkTime();
   });
 }
