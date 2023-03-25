@@ -1,45 +1,43 @@
-const refs = {
-  startBtnEl: document.querySelector('[data-start]'),
-  stopBtnEl: document.querySelector('[data-stop]'),
+const buttons = {
+startBtn: document.querySelector('[data-start]'),
+stopBtn: document.querySelector('[data-stop]'),
 };
 
 let colorSwitchIntervalId = null;
 let currentColor = null;
 
-setColorSwitchState(false);
+setControlsState(false);
 
-refs.startBtnEl.addEventListener('click', startColorSwitch);
-refs.stopBtnEl.addEventListener('click', stopColorSwitch);
+buttons.startBtn.addEventListener('click', startColorSwitchInterval);
+buttons.stopBtn.addEventListener('click', stopColorSwitchInterval);
 
-function startColorSwitch() {
-  setColorSwitchState(true);
+function startColorSwitchInterval() {
+setControlsState(true);
 
-  colorSwitchIntervalId = setInterval(() => {
-    currentColor = getRandomHexColor();
-    setBodyBgColor(currentColor);
-  }, 1000);
+colorSwitchIntervalId = setInterval(() => {
+currentColor = getRandomHexColor();
+setBodyBgColor(currentColor);
+}, 1000);
 }
 
-function stopColorSwitch() {
-  setColorSwitchState(false);
+function stopColorSwitchInterval() {
+setControlsState(false);
 
-  clearInterval(colorSwitchIntervalId);
-  if (currentColor) setBodyBgColor(currentColor);
+clearInterval(colorSwitchIntervalId);
+if (currentColor) setBodyBgColor(currentColor);
 }
 
 function getRandomHexColor() {
-  return `#${Math.floor(Math.random() * 16777215)
-    .toString(16)
-    .padStart(6, 0)}`;
+  return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, 0)}`;
 }
 
 function setBodyBgColor(color) {
-  document.body.style.backgroundColor = color;
+document.body.style.backgroundColor = color;
 }
 
-function setColorSwitchState(state) {
-  refs.startBtnEl.disabled = state;
-  refs.stopBtnEl.disabled = !state;
+function setControlsState(state) {
+buttons.startBtn.disabled = state;
+buttons.stopBtn.disabled = !state;
 }
 
-export { refs, startColorSwitch, stopColorSwitch };
+export { buttons, startColorSwitchInterval, stopColorSwitchInterval };
