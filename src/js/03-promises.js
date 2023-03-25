@@ -19,7 +19,7 @@ function handlePromises(delay, step, amount) {
   let i = 1;
   const intervalId = setInterval(() => {
     if (i <= amount) {
-      createPromise(i, delay + (i - 1) * step, step)
+      createPromise(i, delay + (i - 1) * step)
         .then(result => handlePromiseSuccess(result))
         .catch(error => handlePromiseError(error));
       i += 1;
