@@ -1,20 +1,21 @@
 import { refs } from './01-color-switcher';
 
-export default function getRandomHexColor() {
+function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, 0)}`;
 }
 
-export default function setBodyBgColor(color) {
+export function setBodyBgColor(color) {
   document.body.style.backgroundColor = color;
 }
 
-export default function setColorSwitchState(state) {
-  refs.startBtnEl.disabled = state;
-  refs.stopBtnEl.disabled = !state;
+export function setColorSwitchState(state) {
+  refs.startBtn.disabled = state;
+  refs.stopBtn.disabled = !state;
 }
+
 export const refs = {
-  startBtnEl: document.querySelector('[data-start]'),
-  stopBtnEl: document.querySelector('[data-stop]'),
+  startBtn: document.querySelector('[data-start]'),
+  stopBtn: document.querySelector('[data-stop]'),
 };
 
 let colorSwitchIntervalId = null;
@@ -22,8 +23,8 @@ let currentColor = null;
 
 setColorSwitchState(false);
 
-refs.startBtnEl.addEventListener('click', startColorSwitch);
-refs.stopBtnEl.addEventListener('click', stopColorSwitch);
+refs.startBtn.addEventListener('click', startColorSwitch);
+refs.stopBtn.addEventListener('click', stopColorSwitch);
 
 function startColorSwitch() {
   setColorSwitchState(true);
