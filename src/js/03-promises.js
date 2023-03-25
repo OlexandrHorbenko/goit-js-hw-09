@@ -29,9 +29,9 @@ function handlePromises(delay, step, amount) {
   }, step);
 
   setTimeout(() => {
-    createPromise(i, delay, step)
-      .then((result) => handlePromiseSuccess(result))
-      .catch((error) => handlePromiseError(error));
+    createPromise(i, delay)
+      .then(result => handlePromiseSuccess(result))
+      .catch(error => handlePromiseError(error));
     i += 1;
   }, delay);
 }
@@ -41,7 +41,7 @@ function handlePromiseSuccess({ position, delay }) {
 function handlePromiseError({ position, delay }) {
   Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
 }
-function createPromise(position, delay, step) {
+function createPromise(position, delay) {
   console.log(`Creating promise ${position} with delay ${delay}ms`);
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -51,6 +51,6 @@ function createPromise(position, delay, step) {
       } else {
         reject({ position, delay });
       }
-    }, step);
+    }, delay);
   });
 }
