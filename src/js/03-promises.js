@@ -32,12 +32,12 @@ function handlePromises(delay, step, amount) {
     }
   }, step);
 
-  setTimeout(() => {
-  createPromise(i, delay, step)
-    .then(result => handlePromiseSuccess(result))
-    .catch(error => handlePromiseError(error));
-  i += 1;
-}, delay + step * i);
+   setTimeout(() => {
+    createPromise(i, delay + (i - 1) * step)
+      .then(result => handlePromiseSuccess(result))
+      .catch(error => handlePromiseError(error));
+    i += 1;
+  }, delay + (amount - 1) * step);
 }
 
 function handlePromiseSuccess({ position, delay }) {
