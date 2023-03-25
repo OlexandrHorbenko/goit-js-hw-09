@@ -1,46 +1,47 @@
 import Notiflix from 'notiflix';
-
 const formElement = document.querySelector('.form');
-
-formElement.addEventListener('submit', (event) => {
+formElement.addEventListener('submit', event => {
   event.preventDefault();
-
   const { delay, step, amount } = getFormValues(formElement);
-  processPromises(delay, step, amount);
+  handlePromises(delay, step, amount);
 });
-
 function getFormValues(form) {
   const delayInput = form.querySelector('input[name="delay"]');
   const stepInput = form.querySelector('input[name="step"]');
   const amountInput = form.querySelector('input[name="amount"]');
-
   return {
     delay: parseInt(delayInput.value),
     step: parseInt(stepInput.value),
     amount: parseInt(amountInput.value),
   };
 }
-
-async function processPromises(delay, step, amount) {
-  for (let i = 1; i <= amount; i += 1) {
-    try {
-      const result = await createPromise(i, delay + (i - 1) * step);
-      onPromiseSuccess(result);
-    } catch (error) {
-      onPromiseError(error);
+function handlePromises(delay, step, amount) {
+  let i = 1;
+  const intervalId = setInterval(() => {
+    if (i <= amount) {
+      createPromise(i, delay + (i - 1) * step, step)
+        .then(result => handlePromiseSuccess(result))
+        .catch(error => handlePromiseError(error));
+      i += 1;
+    } else {
+      clearInterval(intervalId);
     }
-  }
-}
+  }, step);
 
-function onPromiseSuccess({ position, delay }) {
+  setTimeout(() => {
+    createPromise(i, delay, step)
+      .then((result) => handlePromiseSuccess(result))
+      .catch((error) => handlePromiseError(error));
+    i += 1;
+  }, delay);
+}
+function handlePromiseSuccess({ position, delay }) {
   Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
 }
-
-function onPromiseError({ position, delay }) {
+function handlePromiseError({ position, delay }) {
   Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
 }
-
-function createPromise(position, delay) {
+function createPromise(position, delay, step) {
   console.log(`Creating promise ${position} with delay ${delay}ms`);
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -50,6 +51,6 @@ function createPromise(position, delay) {
       } else {
         reject({ position, delay });
       }
-    }, delay);
+    }, step);
   });
 }
