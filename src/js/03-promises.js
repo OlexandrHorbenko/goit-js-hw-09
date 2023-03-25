@@ -21,23 +21,29 @@ function getFormValues(form) {
 
 function handlePromises(delay, step, amount) {
   let i = 1;
+  let lastPromiseCreated = false;
   const intervalId = setInterval(() => {
     if (i <= amount) {
       createPromise(i, delay + (i - 1) * step)
         .then(result => handlePromiseSuccess(result))
         .catch(error => handlePromiseError(error));
       i += 1;
+      if (i > amount) {
+        lastPromiseCreated = true;
+      }
     } else {
       clearInterval(intervalId);
     }
   }, step);
 
-   setTimeout(() => {
-    createPromise(i, delay + (i - 1) * step)
-      .then(result => handlePromiseSuccess(result))
-      .catch(error => handlePromiseError(error));
-    i += 1;
-  }, delay + (amount - 1) * step);
+  const lastPromiseDelay = delay + (amount - 1) * step;
+  setTimeout(() => {
+    if (!lastPromiseCreated) {
+      createPromise(i, delay + (i - 1) * step)
+        .then(result => handlePromiseSuccess(result))
+        .catch(error => handlePromiseError(error));
+    }
+  }, lastPromiseDelay);
 }
 
 function handlePromiseSuccess({ position, delay }) {
