@@ -28,9 +28,6 @@ function handlePromises(delay, step, amount) {
         .then(result => handlePromiseSuccess(result))
         .catch(error => handlePromiseError(error));
       i += 1;
-      if (i > amount) {
-        lastPromiseCreated = true;
-      }
     } else {
       clearInterval(intervalId);
     }
@@ -39,11 +36,12 @@ function handlePromises(delay, step, amount) {
   const lastPromiseDelay = delay + (amount - 1) * step;
   setTimeout(() => {
     if (!lastPromiseCreated) {
-      createPromise(i, delay + (i - 1) * step)
+      createPromise(amount, delay + (amount - 1) * step)
         .then(result => handlePromiseSuccess(result))
         .catch(error => handlePromiseError(error));
     }
   }, lastPromiseDelay);
+  lastPromiseCreated = true;
 }
 
 function handlePromiseSuccess({ position, delay }) {
