@@ -36,7 +36,7 @@ function handlePromiseError({ position, delay }) {
 }
 
 function createPromise(position, delay) {
-  console.log(`Creating promise ${position} with delay ${delay}ms`);
+  // console.log(`Creating promise ${position} with delay ${delay}ms`);
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       const shouldResolve = Math.random() > 0.3;
